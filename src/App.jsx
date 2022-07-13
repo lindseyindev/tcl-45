@@ -27,15 +27,15 @@ export function App() {
 
 	function handleClick() {
 		const token = generateToken();
-		setListToken(token);
+		setListToken(token, 'listToken');
 		navigateTo('/list');
 	}
 
 	useEffect(() => {
 		if (!listToken) return;
-
+		console.log({ listToken });
 		/**
-		 * streamListItems` takes a `listToken` so it can commuinicate
+		 * streamListItems` takes a `listToken` so it can communicate
 		 * with our database; then calls a callback function with
 		 * a `snapshot` from the database.
 		 *
@@ -48,15 +48,20 @@ export function App() {
 			 *
 			 * Refer to `api/firebase.js`
 			 */
+			console.log({ listToken });
 			if (listToken !== null) {
+				console.log('Navigation triggered');
 				navigateTo('/list');
 			}
+			// else if (!listToken){
+			// 	navigateTo('/')
+			// }
 			const nextData = getItemData(snapshot);
 
 			/** Finally, we update our React state. */
 			setData(nextData);
 		});
-	}, [listToken, navigateTo]);
+	}, [listToken]);
 
 	return (
 		<Routes>
