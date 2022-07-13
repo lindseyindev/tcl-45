@@ -32,15 +32,13 @@ export function App() {
 	}
 
 	useEffect(() => {
-		if (!listToken) return;
-		console.log({ listToken });
-		/**
-		 * streamListItems` takes a `listToken` so it can communicate
-		 * with our database; then calls a callback function with
-		 * a `snapshot` from the database.
-		 *
-		 * Refer to `api/firebase.js`.
-		 */
+		if (listToken !== null) {
+			console.log('Navigation triggered');
+			navigateTo('/list');
+		} else if (!listToken) {
+			return navigateTo('/');
+		}
+
 		return streamListItems(listToken, (snapshot) => {
 			/**
 			 * Read the documents in the snapshot and do some work
@@ -49,19 +47,13 @@ export function App() {
 			 * Refer to `api/firebase.js`
 			 */
 			console.log({ listToken });
-			if (listToken !== null) {
-				console.log('Navigation triggered');
-				navigateTo('/list');
-			}
-			// else if (!listToken){
-			// 	navigateTo('/')
-			// }
+
 			const nextData = getItemData(snapshot);
 
 			/** Finally, we update our React state. */
 			setData(nextData);
 		});
-	}, [listToken]);
+	}, [listToken, navigateTo]);
 
 	return (
 		<Routes>
